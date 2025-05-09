@@ -6,13 +6,15 @@ import { CreateOfferDto } from "./dto/create-offer.dto";
 import { CustomException } from "../../exceptions/custom.exception";
 import { Coach } from "../coach/coach.schema";
 import { Course } from "../course/course.schema";
+import { Review } from "../reviews/reviews.schema";
 
 @Injectable()
 export class OffersService implements OnModuleInit {
   constructor(
     @InjectModel(Offer.name) private readonly offerModel: Model<Offer>,
     @InjectModel(Coach.name) private readonly coachModel: Model<Coach>,
-    @InjectModel(Course.name) private readonly courseModel: Model<Course>
+    @InjectModel(Course.name) private readonly courseModel: Model<Course>,
+    @InjectModel(Review.name) private readonly review: Model<Review>
   ) {}
 
   async onModuleInit() {
@@ -97,5 +99,6 @@ export class OffersService implements OnModuleInit {
     if (!result) {
       throw new CustomException(`Offer with ID ${id} not found`, 404);
     }
+    await this.review.deleteMany({ offerId: id }).exec();
   }
 }

@@ -49,4 +49,24 @@ export class BookingsService {
     });
     return booking.save();
   }
+
+  async getAllBookings() {
+    return this.booking.find();
+  }
+
+  async getBookingById(id: string) {
+    const booking = await this.booking.findById(id);
+    if (!booking) {
+      throw new CustomException("Booking not found", 404);
+    }
+    return booking;
+  }
+
+  async deleteBooking(id: string) {
+    const result = await this.booking.findByIdAndDelete(id);
+    if (!result) {
+      throw new CustomException("Booking not found", 404);
+    }
+    return { message: "Booking deleted successfully" };
+  }
 }

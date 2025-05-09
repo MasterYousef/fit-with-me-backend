@@ -11,6 +11,7 @@ import { CoachModule } from "./modules/coach/coach.module";
 import { CourseModule } from "./modules/course/course.module";
 import { OffersModule } from "./modules/offers/offers.module";
 import { BookingsModule } from "./modules/bookings/bookings.module";
+import { ReviewsModule } from "./modules/reviews/reviews.module";
 import { json } from "body-parser";
 
 configDotenv({ path: "./src/config/config.env" });
@@ -48,6 +49,7 @@ configDotenv({ path: "./src/config/config.env" });
     CourseModule,
     OffersModule,
     BookingsModule,
+    ReviewsModule,
   ],
   providers: [
     {
