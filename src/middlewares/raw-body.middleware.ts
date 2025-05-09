@@ -1,5 +1,6 @@
 import { Injectable, NestMiddleware } from "@nestjs/common";
 import { Request, Response, NextFunction } from "express";
+import { json } from "body-parser";
 
 @Injectable()
 export class RawBodyMiddleware implements NestMiddleware {
@@ -17,3 +18,11 @@ export class RawBodyMiddleware implements NestMiddleware {
     }
   }
 }
+
+export const rawBodyMiddleware = json({
+  verify: (req: any, res, buf) => {
+    if (req.originalUrl === "/bookings/webhook") {
+      req.rawBody = buf.toString();
+    }
+  },
+});

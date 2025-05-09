@@ -11,7 +11,8 @@ import { CoachModule } from "./modules/coach/coach.module";
 import { CourseModule } from "./modules/course/course.module";
 import { OffersModule } from "./modules/offers/offers.module";
 import { BookingsModule } from "./modules/bookings/bookings.module";
-import { RawBodyMiddleware } from "./middlewares/raw-body.middleware";
+import { rawBodyMiddleware } from "./middlewares/raw-body.middleware";
+import { json } from "body-parser";
 
 configDotenv({ path: "./src/config/config.env" });
 
@@ -59,6 +60,8 @@ configDotenv({ path: "./src/config/config.env" });
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(RawBodyMiddleware).forRoutes("bookings/webhook");
+    consumer
+      .apply(rawBodyMiddleware, json({ limit: "1mb" })) // Apply raw body middleware
+      .forRoutes("bookings/webhook");
   }
 }
