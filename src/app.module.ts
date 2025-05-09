@@ -1,4 +1,4 @@
-import { Module } from "@nestjs/common";
+import { Module, MiddlewareConsumer, NestModule } from "@nestjs/common";
 import { MongooseModule } from "@nestjs/mongoose";
 import { AuthModule } from "./modules/auth/auth.module";
 import { JwtModule } from "@nestjs/jwt";
@@ -11,6 +11,7 @@ import { CoachModule } from "./modules/coach/coach.module";
 import { CourseModule } from "./modules/course/course.module";
 import { OffersModule } from "./modules/offers/offers.module";
 import { BookingsModule } from "./modules/bookings/bookings.module";
+import { RawBodyMiddleware } from "./middlewares/raw-body.middleware";
 
 configDotenv({ path: "./src/config/config.env" });
 
@@ -56,4 +57,8 @@ configDotenv({ path: "./src/config/config.env" });
     CloudinaryService,
   ],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(RawBodyMiddleware).forRoutes("bookings/webhook");
+  }
+}
