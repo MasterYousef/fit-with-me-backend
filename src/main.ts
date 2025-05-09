@@ -9,12 +9,17 @@ import { ValidationPipe } from "@nestjs/common";
 import { configDotenv } from "dotenv";
 import fastifyMultipart from "@fastify/multipart";
 import cors from "@fastify/cors";
+import { json, urlencoded } from "body-parser";
+import * as rawBody from "body-parser";
 
 configDotenv({ path: "./src/config/config.env" });
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
-    new FastifyAdapter()
+    new FastifyAdapter(),
+    {
+      rawBody: true,
+    }
   );
   await app.register(cors, {
     origin: [process.env.FRONTEND_URL, "http://localhost:3000"],
@@ -32,6 +37,7 @@ async function bootstrap() {
     })
   );
   app.setGlobalPrefix("api/v1");
+
   await app.listen(process.env.PORT || 8000, "0.0.0.0", () => {
     console.log("listening on port " + process.env.PORT);
   });

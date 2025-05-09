@@ -1,9 +1,10 @@
-import { Body, Controller, Post, Req } from "@nestjs/common";
+import { Body, Controller, Post, RawBodyRequest, Req } from "@nestjs/common";
 import { BookingsService } from "./bookings.service";
 import { CreateBookingDto } from "./dto/create-booking.dto";
 import user from "src/decorator/user.decorator";
 import { Public } from "src/decorator/public.decorator";
 import { Request } from "express"; // Ensure Express types are used for Request
+import { FastifyRequest } from "fastify";
 
 // Extend the Request interface to include rawBody
 declare module "express" {
@@ -29,7 +30,7 @@ export class BookingsController {
   }
   @Public()
   @Post("webhook")
-  async webhook(@Req() req: Request) {
+  async webhook(@Req() req: RawBodyRequest<FastifyRequest>) {
     const event = req.rawBody; // Use rawBody instead of parsed body
     const sig = req.headers["stripe-signature"];
     return this.bookingService.webhook(event, sig);
