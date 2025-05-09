@@ -2,6 +2,7 @@ import { Body, Controller, Post, Req } from "@nestjs/common";
 import { BookingsService } from "./bookings.service";
 import { CreateBookingDto } from "./dto/create-booking.dto";
 import user from "src/decorator/user.decorator";
+import { Public } from "src/decorator/public.decorator";
 
 @Controller("bookings")
 export class BookingsController {
@@ -18,6 +19,7 @@ export class BookingsController {
       "http://localhost:3000";
     return this.bookingService.payment(userId, body.offerId, originUrl);
   }
+  @Public()
   @Post("webhook")
   async webhook(@Req() req: Request) {
     const event = req.body;
